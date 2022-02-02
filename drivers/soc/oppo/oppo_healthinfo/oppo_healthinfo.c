@@ -12,11 +12,8 @@
 #ifdef CONFIG_OPPO_MEM_MONITOR
 #include <linux/oppo_healthinfo/memory_monitor.h>
 #endif
-#ifdef OPLUS_FEATURE_UFSPLUS
-//Jinghua.Yu@BSP.Storage.UFS 2020/06/12, Add TAG for UFS plus
 #if defined(CONFIG_UFSFEATURE)
-#include "../../../drivers/scsi/oufs/ufsfeature.h"
-#endif
+#include "../../../drivers/scsi/ufs/ufsfeature.h"
 #endif
 
 #include <linux/blkdev.h>
@@ -799,8 +796,7 @@ static const struct file_operations proc_fsync_thresh_fops = {
         .write = ohm_thresh_write_fsync,
 };
 /******  End  ******/
-#ifdef OPLUS_FEATURE_UFSPLUS
-//Jinghua.Yu@BSP.Storage.UFS 2020/06/12, Add TAG for UFS plus
+
 #if defined(CONFIG_UFSFEATURE)
 static ssize_t ufsf_para_read(struct file *filp, char __user *buff, size_t count,
              loff_t *off)
@@ -864,7 +860,6 @@ static ssize_t ufsf_para_read(struct file *filp, char __user *buff, size_t count
 static const struct file_operations proc_ufsf_para_fops = {
     .read = ufsf_para_read,
 };
-#endif
 #endif
 
 #define HEALTHINFO_PROC_NODE "oplus_healthinfo"
@@ -970,8 +965,7 @@ static int __init oppo_healthinfo_init(void)
         ohm_err("create cpu info proc failed.\n");
         goto ERROR_INIT_VERSION;
     }
-#ifdef OPLUS_FEATURE_UFSPLUS
-//Jinghua.Yu@BSP.Storage.UFS 2020/06/12, Add TAG for UFS plus
+
 #if defined(CONFIG_UFSFEATURE)
 	pentry = proc_create("ufs_feature", S_IRUGO, oppo_healthinfo, &proc_ufsf_para_fops);
 	if(!pentry) {
@@ -979,7 +973,7 @@ static int __init oppo_healthinfo_init(void)
 		goto ERROR_INIT_VERSION;
 	}
 #endif
-#endif
+
 #if defined(VENDOR_EDIT) && defined(CONFIG_VIRTUAL_RESERVE_MEMORY)
 //Peifeng.Li@PSW.Kernel.BSP.Memory, 2020/04/22,virtual reserve memory
     pentry = proc_create("vm_fra_op_enabled", S_IRWXUGO, oppo_healthinfo, &vm_fra_op_fops);
